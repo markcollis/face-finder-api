@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 // const bodyParser = require('body-parser');
 // no longer required by current version of express (bundled as express.json())
 const app = express();
@@ -27,6 +28,7 @@ let database = {
 
 // app.use(bodyParser.json());
 app.use(express.json());
+app.use(cors());
 
 // API specification
 // 1. /                 --> res = this is working
@@ -45,7 +47,7 @@ app.post('/signin', (req, res) => {
   // res.send('signing in');
   if (req.body.email === database.users[0].email &&
       req.body.password === database.users[0].password) {
-    res.json('success');
+    res.json(database.users[0]);
   } else {
     res.status(400).json('error logging in');
   }
