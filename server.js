@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt-nodejs');
 const knex = require('knex');
+const corsProxy = require('cors-anywhere');
 
 const db = knex({
   client: 'pg',
@@ -11,6 +12,17 @@ const db = knex({
     password: 'highlodge',
     database: 'face-finder'
   }
+});
+
+// start CORS proxy running to be available when needed (manually in URL).
+// Automatic use would require changes to front end.
+const corsProxyHost = '127.0.0.1';
+const corsProxyPort = 8080;
+corsProxy.createServer({
+  originWhitelist: [] // allow all
+}).listen(corsProxyPort, corsProxyHost, function () {
+  console.log('Running CORS Anywhere on ' + corsProxyHost + ':' + corsProxyPort);
+  console.log('Use in case of CORS error by prefixing image URL.');
 });
 
 // const bodyParser = require('body-parser');

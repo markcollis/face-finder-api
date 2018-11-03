@@ -12,6 +12,7 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
+    "cors-anywhere": "^0.4.1",
     "express": "^4.16.4",
     "knex": "^0.15.2",
     "pg": "^7.5.0"
