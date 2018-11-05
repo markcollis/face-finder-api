@@ -25,12 +25,12 @@ corsProxy.createServer({
   console.log('Use in case of CORS error by prefixing image URL.');
 });
 
-// const bodyParser = require('body-parser');
-// no longer required by current version of express (bundled as express.json())
 const app = express();
-// app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
+// const bodyParser = require('body-parser');
+// app.use(bodyParser.json());
+// no longer required by current version of express (bundled as express.json())
 
 // API specification
 // 1. /                 --> res = this is working
