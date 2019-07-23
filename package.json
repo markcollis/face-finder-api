@@ -1,6 +1,6 @@
 {
   "name": "face-finder-api",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "script.js",
   "scripts": {
     "start": "nodemon server.js"
