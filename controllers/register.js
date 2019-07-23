@@ -1,6 +1,8 @@
 const handleRegisterPost = (bcrypt, db) => (req, res) => {
+  console.log('Processing /register request');
   const { email, name, password } = req.body;
   if (!email || !name || !password) {
+    console.log('Error: incorrect form submission.');
     return res.status(400).json('incorrect form submission');
   }
   const hash = bcrypt.hashSync(password);
@@ -27,7 +29,11 @@ const handleRegisterPost = (bcrypt, db) => (req, res) => {
       .catch(trx.rollback);
   })
     .catch(err => {
-      console.log(err);
+      if (err.code === '23505') {
+        console.log('Error: an account already exists for this email address.');
+        return res.status(403).json('')
+      }
+      console.log('Error: unable to register.', err);
       return res.status(400).json('unable to register');
     });
 };
