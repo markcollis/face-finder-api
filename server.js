@@ -2,14 +2,18 @@ require('dotenv').config(); // import environment variables from .env file
 // external modules to handle HTTP and connect to database
 const express = require('express');
 const cors = require('cors');
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcryptjs');
 const knex = require('knex');
 const corsProxy = require('cors-anywhere');
 
-const DBHOST = process.env.DBHOST;
-const DBUSER = process.env.DBUSER;
-const DBPW = process.env.DBPW;
-const DBNAME = process.env.DBNAME || 'face-finder';
+/* eslint no-console: 0 */
+const {
+  API_PORT = 3001,
+  DBHOST,
+  DBUSER,
+  DBPW,
+  DBNAME,
+} = process.env;
 
 const db = knex({
   client: 'pg',
@@ -22,14 +26,14 @@ const db = knex({
 });
 
 // internal modules for each component of API
-// each function within them returns a *function* of (req, res)
+// each function within them returns a function of (req, res)
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
-// start CORS proxy running to be available when needed (manually in URL).
-// Automatic use would require changes to front end.
+// start CORS proxy running to be available when needed
+// (i.e. if loading without the proxy fails).
 const CORSPROXYHOST = process.env.CORSPROXYHOST || '127.0.0.1';
 const CORSPROXYPORT = process.env.CORSPROXYPORT || 8080;
 corsProxy.createServer({
@@ -43,7 +47,7 @@ app.use(express.json());
 app.use(cors());
 
 // API specification
-// 1. /                 --> res = this is working
+// 1. /                 --> res = confirm that API is working
 app.get('/', (req, res) => res.send('this is working'));
 // 2. /signin           --> POST = success/failure
 app.post('/signin', signin.handleSigninPost(bcrypt, db));
@@ -54,7 +58,6 @@ app.get('/profile/:id', profile.handleProfileGet(db));
 // 5. /image            --> PUT --> user
 app.put('/image', image.handleImagePut(db));
 
-const APIPORT = process.env.APIPORT || 3001;
-app.listen(APIPORT, () => {
-  console.log(`Running face-finder API on port ${APIPORT}`);
+app.listen(API_PORT, () => {
+  console.log(`Running face-finder API on port ${API_PORT}`);
 });
